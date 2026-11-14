@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURELLE COFFEE HOUSE | Davao City</title>
+<meta name="description" content="AURELLE Coffee House - Premium coffee, handcrafted drinks and delicious treats in Davao City.">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Georgia,serif;background:#faf6ef;color:#38291f}
+button,input,textarea,select{font:inherit}
+header{background:#35251d;color:#fff8ed;padding:18px 6%;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+.logo{font-size:25px;letter-spacing:4px;font-weight:bold}
+nav{display:flex;gap:19px;flex-wrap:wrap}
+nav a{color:#fff8ed;text-decoration:none;font-size:13px}
+nav a:hover{color:#d9b77e}
+.hero{min-height:570px;padding:80px 8%;display:flex;align-items:center;color:white;background:linear-gradient(90deg,rgba(25,17,12,.85),rgba(25,17,12,.25)),url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1600&q=85') center/cover}
+.hero-content{max-width:620px;animation:rise 1s ease}
+.eyebrow{color:#d8b77e;letter-spacing:5px;font-size:12px}
+.hero h1{font-size:clamp(43px,7vw,78px);line-height:1.05;margin:22px 0}
+.hero p{line-height:1.8;margin-bottom:28px;font-size:17px}
+.btn{display:inline-block;background:#b88d58;color:white;border:0;padding:14px 24px;text-decoration:none;cursor:pointer;border-radius:3px;transition:.25s}
+.btn:hover{background:#8d673e;transform:translateY(-2px)}
+section{padding:75px 7%}
+.heading{text-align:center;margin-bottom:38px}
+.heading small{color:#a47a49;letter-spacing:4px}
+.heading h2{font-size:36px;margin-top:12px}
+.about-text{max-width:780px;margin:auto;text-align:center;color:#756456;line-height:1.9;font-size:17px}
+.menu-section{background:#eee5d8}
+.tabs{display:flex;justify-content:center;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+.tab{padding:10px 22px;background:transparent;border:1px solid #876747;color:#493328;cursor:pointer}
+.tab.active,.tab:hover{background:#493328;color:white}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.product{background:#fffaf3;border-radius:7px;overflow:hidden;box-shadow:0 5px 20px #49332812;transition:.3s}
+.product:hover{transform:translateY(-6px)}
+.product img{width:100%;height:205px;object-fit:cover;display:block}
+.product-info{padding:19px}
+.product-info h3{font-size:19px;margin-bottom:9px}
+.product-info p{color:#806f60;font-size:14px;line-height:1.6;min-height:44px}
+.price{display:block;color:#a47745;font-weight:bold;font-size:19px;margin:13px 0}
+.add{width:100%;padding:12px;border:0;background:#493328;color:white;cursor:pointer}
+.add:hover{background:#a47745}
+.order-section{background:#f8f2e9}
+.order-layout{max-width:900px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.panel{background:white;padding:24px;border-radius:7px;box-shadow:0 4px 18px #49332810}
+.panel h3{margin-bottom:18px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #eee;padding:13px 0}
+.cart-item small{color:#806f60}
+.qty button{padding:4px 10px;cursor:pointer;border:1px solid #cdbda9;background:#faf6ef}
+.remove{color:#a33;border:0;background:none;cursor:pointer;margin-left:7px}
+.total-line{display:flex;justify-content:space-between;padding:8px 0}
+.grand{font-size:21px;font-weight:bold;border-top:1px solid #ddd;margin-top:10px;padding-top:14px}
+form label{display:block;margin:13px 0 6px;font-size:14px}
+form input,form textarea,form select{width:100%;padding:12px;border:1px solid #d8cbb9;background:#fffdf9;border-radius:3px}
+form textarea{min-height:75px;resize:vertical}
+.form-btn{width:100%;margin-top:18px}
+.note{font-size:12px;color:#806f60;line-height:1.6;margin-top:10px}
+.payment-box{background:#f8f2e9;padding:14px;margin-top:12px;display:none}
+.payment-box img{max-width:180px;width:100%;display:block;margin:12px auto}
+#proof-preview{max-width:180px;display:none;margin-top:12px}
+.location{background:#eee5d8;text-align:center}
+.map{width:100%;height:320px;border:0;margin-top:25px}
+footer{background:#35251d;color:#fff8ed;text-align:center;padding:35px 15px;line-height:2}
+footer a{color:#d8b77e;text-decoration:none;margin:0 8px}
+@keyframes rise{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){
+header{justify-content:center;text-align:center}
+nav{justify-content:center;gap:12px}
+.hero{min-height:490px}
+section{padding:55px 5%}
+.order-layout{grid-template-columns:1fr}
+.heading h2{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">AURELLE</div>
+  <nav>
+    <a href="#home">HOME</a>
+    <a href="#about">ABOUT</a>
+    <a href="#menu">MENU</a>
+    <a href="#order">ORDER</a>
+    <a href="#location">LOCATION</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="eyebrow">WELCOME TO AURELLE</div>
+    <h1>Where Every Cup Feels Special.</h1>
+    <p>Discover handcrafted coffee, delicious treats, and beautiful moments. Your cozy coffee experience starts here.</p>
+    <a href="#menu" class="btn">EXPLORE OUR MENU</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="heading">
+    <small>OUR STORY</small>
+    <h2>A Little About Us</h2>
+  </div>
+  <p class="about-text">
+    At Aurelle Coffee House, we believe that every cup tells a story.
+    We bring together carefully crafted drinks, comforting flavors,
+    and a warm atmosphere to make every visit memorable.
+    Come in, slow down, and enjoy your little moment of happiness.
+  </p>
+</section>
+
+<section class="menu-section" id="menu">
+  <div class="heading">
+    <small>MADE WITH LOVE</small>
+    <h2>Our Menu</h2>
+    <p style="margin-top:12px;color:#806b5a">Find your new favorite.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showMenu('coffee',this)">Coffee</button>
+    <button class="tab" onclick="showMenu('noncoffee',this)">Non-Coffee</button>
+    <button class="tab" onclick="showMenu('food',this)">Food & Snacks</button>
+  </div>
+
+  <div class="menu-grid" id="menu-grid"></div>
+</section>
+
+<section class="order-section" id="order">
+  <div class="heading">
+    <small>YOUR FAVORITES</small>
+    <h2>Order Online</h2>
+  </div>
+
+  <div class="order-layout">
+    <div class="panel">
+      <h3>Your Shopping Cart</h3>
+      <div id="cart-items">
+        <p style="color:#806f60">Your cart is empty. Add something delicious!</p>
+      </div>
+      <div class="total-line"><span>Subtotal</span><span id="subtotal">₱0</span></div>
+      <div class="total-line"><span>Delivery Fee</span><span id="delivery-display">₱0</span></div>
+      <div class="total-line grand"><span>Total</span><span id="grand-total">₱0</span></div>
+    </div>
+
+    <div class="panel">
+      <h3>Customer Details</h3>
+      <form id="order-form">
+        <label>Full Name *</label>
+        <input id="customer-name" required placeholder="Enter your full name">
+
+        <label>Contact Number *</label>
+        <input id="customer-phone" type="tel" required placeholder="09XXXXXXXXX">
+
+        <label>Order Type *</label>
+        <select id="order-type" onchange="updateDelivery()" required>
+          <option value="Delivery">Delivery</option>
+          <option value="Pickup">Store Pickup</option>
+        </select>
+
+        <label>Delivery Address</label>
+        <textarea id="customer-address" placeholder="House number, street, barangay, Davao City"></textarea>
+
+        <label>Delivery Partner</label>
+        <select id="delivery-partner">
+          <option>Grab</option>
+          <option>Foodpanda</option>
+        </select>
+
+        <label>Payment Method *</label>
+        <select id="payment-method" onchange="showPayment()" required>
+          <option value="">Choose payment</option>
+          <option>GCash</option>
+          <option>Maya</option>
+          <option>Bank Transfer</option>
+          <option>Cash on Pickup</option>
+        </select>
+
+        <div class="payment-box" id="payment-box">
+          <strong id="payment-title"></strong>
+          <p id="payment-instructions" class="note"></p>
+          <img id="payment-qr" src="" alt="Payment QR code" style="display:none">
+          <label>Upload Proof of Payment</label>
+          <input type="file" id="proof" accept="image/*" onchange="previewProof(event)">
+          <img id="proof-preview" alt="Payment proof preview">
+          <p class="note">The image preview stays on this device. Attach it manually when sending your order.</p>
+        </div>
+
+        <label>Order Notes</label>
+        <textarea id="order-notes" placeholder="Special instructions (optional)"></textarea>
+
+        <button class="btn form-btn" type="submit">PREPARE MY ORDER</button>
+        <p class="note">Your order summary will open in a message. Confirm payment and delivery arrangements with the shop.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="location" id="location">
+  <div class="heading">
+    <small>FIND US</small>
+    <h2>Located in Davao City</h2>
+  </div>
+  <p>Visit us and enjoy your favorite cup of coffee.</p>
+  <iframe class="map" src="https://www.google.com/maps?q=Davao%20City%20Philippines&output=embed" loading="lazy" title="Davao City map"></iframe>
+  <p class="note">This map shows Davao City generally. Add your exact shop address and map pin before publishing.</p>
+</section>
+
+<footer>
+  <h2>AURELLE COFFEE HOUSE</h2>
+  <p>Crafted with care. Served with love.</p>
+  <p>Davao City, Philippines</p>
+  <p>
+    <a href="#home">Home</a>
+    <a href="#menu">Menu</a>
+    <a href="#order">Order</a>
+  </p>
+  <p>© 2026 AURELLE COFFEE HOUSE</p>
+</footer>
+
+<script>
+const products = {
+  coffee: [
+    ["Iced Café Latte",150,"Smooth espresso blended with fresh milk over ice.","https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=700&q=80"],
+    ["Cappuccino",145,"Rich espresso topped with silky milk foam.","https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80"],
+    ["Caramel Macchiato",165,"Espresso, creamy milk, and caramel drizzle.","https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=700&q=80"],
+    ["Chocolate Mocha",160,"A delicious blend of coffee and chocolate.","https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=700&q=80"],
+    ["Iced Americano",125,"Bold espresso with refreshing chilled water.","https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=700&q=80"],
+    ["Vanilla Latte",160,"Espresso and milk with smooth vanilla.","https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=700&q=80"]
+  ],
+  noncoffee: [
+    ["Matcha Latte",160,"Earthy matcha blended with creamy milk.","https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=700&q=80"],
+    ["Strawberry Milk",145,"Sweet strawberry with fresh creamy milk.","https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=700&q=80"],
+    ["Chocolate Milk",145,"Rich chocolate drink for every chocolate lover.","https://images.unsplash.com/photo-1542990253-0b8be5d6b2b3?auto=format&fit=crop&w=700&q=80"],
+    ["Iced Lemon Tea",120,"Refreshing tea with a citrus twist.","https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=80"]
+  ],
+  food: [
+    ["Butter Croissant",110,"Flaky, buttery, and freshly baked.","https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=80"],
+    ["Blueberry Cheesecake",180,"Creamy cheesecake with blueberry topping.","https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=700&q=80"],
+    ["Chocolate Brownie",120,"Rich and fudgy chocolate goodness.","https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=700&q=80"],
+    ["Club Sandwich",190,"A satisfying sandwich for any time of day.","https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80"]
+  ]
+};
+
+let cart = [];
+
+function peso(value) {
+  return "₱" + value.toLocaleString("en-PH");
+}
+
+function showMenu(category, button) {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  button.classList.add("active");
+
+  const grid = document.getElementById("menu-grid");
+  grid.innerHTML = products[category].map((product,index) => `
+    <article class="product">
+      <img src="${product[3]}" alt="${product[0]}" loading="lazy">
+      <div class="product-info">
+        <h3>${product[0]}</h3>
+        <p>${product[2]}</p>
+        <span class="price">${peso(product[1])}</span>
+        <button class="add" onclick="addToCart('${category}',${index})">ADD TO CART</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function addToCart(category,index) {
+  const product = products[category][index];
+  const existing = cart.find(item => item.name === product[0]);
+
+  if (existing) existing.quantity++;
+  else cart.push({name:product[0],price:product[1],quantity:1});
+
+  displayCart();
+}
+
+function changeQuantity(index,amount) {
+  cart[index].quantity += amount;
+  if (cart[index].quantity <= 0) cart.splice(index,1);
+  displayCart();
+}
+
+function removeItem(index) {
+  cart.splice(index,1);
+  displayCart();
+}
+
+function updateDelivery() {
+  const isDelivery = document.getElementById("order-type").value === "Delivery";
+  document.getElementById("customer-address").required = isDelivery;
+  document.getElementById("delivery-partner").disabled = !isDelivery;
+  document.getElementById("delivery-display").textContent = peso(isDelivery ? 80 : 0);
+  displayCart();
+}
+
+function displayCart() {
+  const container = document.getElementById("cart-items");
+  const subtotal = cart.reduce((sum,item) => sum + item.price * item.quantity,0);
+  const delivery = document.getElementById("order-type").value === "Delivery" ? 80 : 0;
+
+  if (cart.length === 0) {
+    container.innerHTML = '<p style="color:#806f60">Your cart is empty. Add something delicious!</p>';
+  } else {
+    container.innerHTML = cart.map((item,index) => `
+      <div class="cart-item">
+        <div>
+          <strong>${item.name}</strong><br>
+          <small>${peso(item.price)} each</small>
+        </div>
+        <div class="qty">
+          <button type="button" onclick="changeQuantity(${index},-1)">−</button>
+          ${item.quantity}
+          <button type="button" onclick="changeQuantity(${index},1)">+</button>
+          <button type="button" class="remove" onclick="removeItem(${index})">Remove</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("subtotal").textContent = peso(subtotal);
+  document.getElementById("delivery-display").textContent = peso(delivery);
+  document.getElementById("grand-total").textContent = peso(subtotal + delivery);
+}
+
+function showPayment() {
+  const method = document.getElementById("payment-method").value;
+  const box = document.getElementById("payment-box");
+  const title = document.getElementById("payment-title");
+  const instructions = document.getElementById("payment-instructions");
+  const qr = document.getElementById("payment-qr");
+
+  box.style.display = method ? "block" : "none";
+  qr.style.display = "none";
+
+  const messages = {
+    "GCash":"Add your official GCash QR image before accepting payments.",
+    "Maya":"Add your official Maya payment details before accepting payments.",
+    "Bank Transfer":"Add your official bank name and account details.",
+    "Cash on Pickup":"Pay directly when collecting your order."
+  };
+
+  title.textContent = method;
+  instructions.textContent = messages[method] || "";
+
+  // To display a QR, replace the empty value with your uploaded image filename.
+  const qrImages = {
+    "GCash":"",
+    "Maya":"",
+    "Bank Transfer":""
+  };
+
+  if (qrImages[method]) {
+    qr.src = qrImages[method];
+    qr.style.display = "block";
+  }
+}
+
+function previewProof(event) {
+  const file = event.target.files[0];
+  const preview = document.getElementById("proof-preview");
+
+  if (!file) {
+    preview.style.display = "none";
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image file.");
+    event.target.value = "";
+    return;
+  }
+
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+}
+
+document.getElementById("order-form").addEventListener("submit",function(event) {
+  event.preventDefault();
+
+  if (cart.length === 0) {
+    alert("Please add an item to your cart first.");
+    return;
+  }
+
+  const name = document.getElementById("customer-name").value.trim();
+  const phone = document.getElementById("customer-phone").value.trim();
+  const type = document.getElementById("order-type").value;
+  const address = document.getElementById("customer-address").value.trim();
+  const partner = document.getElementById("delivery-partner").value;
+  const payment = document.getElementById("payment-method").value;
+  const notes = document.getElementById("order-notes").value.trim();
+
+  if (type === "Delivery" && !address) {
+    alert("Please enter your delivery address.");
+    return;
+  }
+
+  if (!payment) {
+    alert("Please choose a payment method.");
+    return;
+  }
+
+  const subtotal = cart.reduce((sum,item) => sum + item.price * item.quantity,0);
+  const delivery = type === "Delivery" ? 80 : 0;
+
+  let message = "AURELLE COFFEE HOUSE - NEW ORDER\n\n";
+  message += "Customer: " + name + "\n";
+  message += "Contact: " + phone + "\n";
+  message += "Order Type: " + type + "\n";
+
+  if (type === "Delivery") {
+    message += "Address: " + address + "\n";
+    message += "Delivery Partner: " + partner + "\n";
+  }
+
+  message += "\nORDER ITEMS\n";
+
+  cart.forEach(item => {
+    message += item.name + " x " + item.quantity + " = " + peso(item.price * item.quantity) + "\n";
+  });
+
+  message += "\nSubtotal: " + peso(subtotal);
+  message += "\nDelivery Fee: " + peso(delivery);
+  message += "\nTOTAL: " + peso(subtotal + delivery);
+  message += "\nPayment: " + payment;
+  message += "\nNotes: " + (notes || "None");
+  message += "\n\nPlease confirm my order. Thank you!";
+
+  // Replace this with your real Facebook Page username.
+  const messengerPage = "yourpageusername";
+  const messengerURL = "https://m.me/" + messengerPage;
+
+  const confirmed = confirm(
+    "Your order summary is ready.\n\n" +
+    message +
+    "\n\nPress OK to copy the order summary. Then send it to the shop through Messenger."
+  );
+
+  if (confirmed) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(message).then(() => {
+        alert("Order summary copied! Messenger will now open. Paste your order there.");
+        window.open(messengerURL,"_blank");
+      }).catch(() => {
+        window.prompt("Copy your order summary:",message);
+      });
+    } else {
+      window.prompt("Copy your order summary:",message);
+    }
+  }
+});
+
+showMenu("coffee",document.querySelector(".tab"));
+updateDelivery();
+</script>
+
+</body>
+</html>
