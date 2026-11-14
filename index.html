@@ -476,21 +476,21 @@ function showPayment() {
   qr.style.display = "none";
 
   const messages = {
-    "GCash":"Add your official GCash QR image before accepting payments.",
-    "Maya":"Add your official Maya payment details before accepting payments.",
-    "Bank Transfer":"Add your official bank name and account details.",
-    "Cash on Pickup":"Pay directly when collecting your order."
-  };
+  "GCash":"Account Name: Saturnina Dañeliz. Please scan the QR code to pay.",
+  "Maya":"Maya payment details will be provided soon.",
+  "Bank Transfer":"Bank transfer details will be provided soon.",
+  "Cash on Pickup":"Pay directly when collecting your order."
+};
 
   title.textContent = method;
   instructions.textContent = messages[method] || "";
 
   // To display a QR, replace the empty value with your uploaded image filename.
   const qrImages = {
-    "GCash":"",
-    "Maya":"",
-    "Bank Transfer":""
-  };
+  "GCash":"aurelle-gcash-qr.jpg",
+  "Maya":"",
+  "Bank Transfer":""
+};
 
   if (qrImages[method]) {
     qr.src = qrImages[method];
