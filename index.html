@@ -595,6 +595,54 @@ document.getElementById("order-form").addEventListener("submit",function(event) 
 
 showMenu("coffee",document.querySelector(".tab"));
 updateDelivery();
+  
+// ===== AURELLE SCROLL REVEAL ANIMATION =====
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.12
+});
+
+function animateRevealElements() {
+  document.querySelectorAll(
+    "section, .heading, .about-text, .panel, footer"
+  ).forEach(element => {
+    if (!element.classList.contains("reveal")) {
+      element.classList.add("reveal");
+      revealObserver.observe(element);
+    }
+  });
+
+  document.querySelectorAll(".product").forEach((element,index) => {
+    if (!element.classList.contains("reveal-ready")) {
+      element.classList.add("reveal-ready");
+      element.style.transitionDelay = (index * 100) + "ms";
+      revealObserver.observe(element);
+    }
+  });
+}
+
+// Animate newly loaded menu cards too
+const menuAnimationObserver = new MutationObserver(() => {
+  animateRevealElements();
+});
+
+const menuGrid = document.getElementById("menu-grid");
+
+if (menuGrid) {
+  menuAnimationObserver.observe(menuGrid, {
+    childList: true
+  });
+}
+
+animateRevealElements();
+
 </script>
 
 </body>
