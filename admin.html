@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURELLE Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f8f3eb;color:#38291f}
+header{background:#35251d;color:#fff;padding:22px}
+main{max-width:1000px;margin:30px auto;padding:20px}
+.card{background:white;padding:22px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 15px #0001}
+input,button,select{padding:12px;width:100%;margin:7px 0;border:1px solid #ddd;border-radius:7px}
+button{background:#65452f;color:white;border:0;font-weight:bold;cursor:pointer}
+.order{border:1px solid #e5ddd3;padding:15px;border-radius:9px;margin:12px 0}
+.small{color:#78695e;font-size:13px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+<h2>AURELLE COFFEE HOUSE</h2>
+<p>Admin Dashboard</p>
+</header>
+
+<main>
+<section class="card" id="login">
+<h2>Admin Login</h2>
+<input type="email" id="email" placeholder="Admin email">
+<input type="password" id="password" placeholder="Password">
+<button onclick="loginAdmin()">Login</button>
+<p id="loginMessage" class="small"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2>Orders</h2>
+<button onclick="loadOrders()">Refresh Orders</button>
+<button onclick="logoutAdmin()">Logout</button>
+<div id="orders">Loading...</div>
+</div>
+</section>
+</main>
+
+<script>
+const SUPABASE_URL = "https://fxekfzascashwrtgwbtr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_9fAQ7qBb2bQgVgqhQP49FQ_IjXCwic0";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+async function loginAdmin(){
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ const msg=document.getElementById("loginMessage");
+
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+
+ if(error){
+   msg.textContent="Login failed: "+error.message;
+   return;
+ }
+
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
+ loadOrders();
+}
+
+async function loadOrders(){
+ const area=document.getElementById("orders");
+ area.textContent="Loading orders...";
+
+ const {data,error}=await db
+ .from("orders")
+ .select("*")
+ .order("created_at",{ascending:false});
+
+ if(error){
+   area.textContent="Cannot load orders: "+error.message;
+   return;
+ }
+
+ if(!data.length){
+   area.textContent="No orders yet.";
+   return;
+ }
+
+ area.innerHTML="";
+
+ data.forEach(order=>{
+   const div=document.createElement("div");
+   div.className="order";
+
+   const details=document.createElement("div");
+   details.textContent=
+     "Order #"+order.id+
+     " | "+order.customer_name+
+     " | "+order.customer_phone+
+     " | "+order.order_type+
+     " | ₱"+Number(order.total_amount).toFixed(2)+
+     " | "+order.payment_method;
+
+   const status=document.createElement("select");
+   ["Pending","Preparing","Ready","Completed","Cancelled"].forEach(s=>{
+     const option=document.createElement("option");
+     option.value=s;
+     option.textContent=s;
+     if(order.status===s) option.selected=true;
+     status.appendChild(option);
+   });
+
+   const items=document.createElement("p");
+   items.textContent="Items: "+(order.order_items||[])
+     .map(i=>i.name+" x "+i.quantity).join(", ");
+
+   const update=document.createElement("button");
+   update.textContent="Update Status";
+   update.onclick=()=>updateStatus(order.id,status.value);
+
+   div.append(details,items,status,update);
+   area.appendChild(div);
+ });
+}
+
+async function updateStatus(id,status){
+ const {error}=await db.from("orders")
+   .update({status})
+   .eq("id",id);
+
+ if(error){
+   alert("Update failed: "+error.message);
+   return;
+ }
+
+ alert("Order status updated!");
+ loadOrders();
+}
+
+async function logoutAdmin(){
+ await db.auth.signOut();
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("login").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
