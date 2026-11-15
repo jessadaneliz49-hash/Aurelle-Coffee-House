@@ -607,12 +607,12 @@ document.getElementById("order-form").addEventListener("submit", async function(
       .insert([orderData]);
 
     if (error) {
-      console.error("Supabase error:", error);
-      alert("Order was not saved. Please try again.");
-      return;
-    }
+  console.error("Supabase error:", error);
+  alert("Order was not saved: " + error.message);
+  return;
+}
 
-    alert("Your order was successfully saved!");
+alert("Your order was successfully saved!");
 
     const messengerPage = "jane.sarah.377487";
     const messengerURL = "https://m.me/" + messengerPage;
