@@ -358,6 +358,9 @@ body::after {
   </p>
   <p>© 2026 AURELLE COFFEE HOUSE</p>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 
 <script>
 const products = {
@@ -517,7 +520,8 @@ function previewProof(event) {
   preview.style.display = "block";
 }
 
-document.getElementById("order-form").addEventListener("submit",function(event) {
+
+document.getElementById("order-form").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   if (cart.length === 0) {
@@ -543,7 +547,7 @@ document.getElementById("order-form").addEventListener("submit",function(event) 
     return;
   }
 
-  const subtotal = cart.reduce((sum,item) => sum + item.price * item.quantity,0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const delivery = type === "Delivery" ? 80 : 0;
 
   let message = "AURELLE COFFEE HOUSE - NEW ORDER\n\n";
@@ -569,29 +573,69 @@ document.getElementById("order-form").addEventListener("submit",function(event) 
   message += "\nNotes: " + (notes || "None");
   message += "\n\nPlease confirm my order. Thank you!";
 
-  // Replace this with your real Facebook Page username.
-  const messengerPage = "jane.sarah.377487";
-const messengerURL = "https://m.me/" + messengerPage;
-
   const confirmed = confirm(
     "Your order summary is ready.\n\n" +
     message +
-    "\n\nPress OK to copy the order summary. Then send it to the shop through Messenger."
+    "\n\nPress OK to save your order and continue to Messenger."
   );
 
-  if (confirmed) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(message).then(() => {
-        alert("Order summary copied! Messenger will now open. Paste your order there.");
-        window.open(messengerURL,"_blank");
-      }).catch(() => {
-        window.prompt("Copy your order summary:",message);
-      });
-    } else {
-      window.prompt("Copy your order summary:",message);
+  if (!confirmed) return;
+
+  const orderData = {
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: type === "Delivery" ? address : null,
+    order_items: cart.map(item => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity
+    })),
+    total_amount: subtotal + delivery,
+    payment_method: payment,
+    status: "Pending",
+    order_type: type,
+    delivery_fee: delivery,
+    payment_reference: null,
+    customer_notes: type === "Delivery"
+      ? "Delivery Partner: " + partner + (notes ? "\n" + notes : "")
+      : notes || null
+  };
+
+  try {
+    const { error } = await supabaseClient
+      .from("orders")
+      .insert([orderData]);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      alert("Order was not saved. Please try again.");
+      return;
     }
+
+    alert("Your order was successfully saved!");
+
+    const messengerPage = "jane.sarah.377487";
+    const messengerURL = "https://m.me/" + messengerPage;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(message);
+        alert("Order summary copied! Paste it into Messenger.");
+      } catch (copyError) {
+        window.prompt("Copy your order summary:", message);
+      }
+    } else {
+      window.prompt("Copy your order summary:", message);
+    }
+
+    window.open(messengerURL, "_blank");
+
+  } catch (error) {
+    console.error("Order error:", error);
+    alert("Something went wrong. Please try again.");
   }
 });
+
 
 showMenu("coffee",document.querySelector(".tab"));
 updateDelivery();
@@ -643,7 +687,17 @@ if (menuGrid) {
 
 animateRevealElements();
 
-</script>
 
+const SUPABASE_URL = "https://fxekfzascashwrtgwbtr.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_9fAQ7qBb2bQgVgqhQP49FQ_IjXCwic0";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log("AURELLE Supabase connected!");
+</script>
 </body>
 </html>
