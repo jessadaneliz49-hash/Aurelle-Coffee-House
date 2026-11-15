@@ -9,7 +9,7 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f8f3eb;color:#38291f}
-header{background:#35251d;color:#fff;padding:22px}
+header{background:#35251d;color:white;padding:22px}
 main{max-width:1000px;margin:30px auto;padding:20px}
 .card{background:white;padding:22px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 15px #0001}
 input,button,select{padding:12px;width:100%;margin:7px 0;border:1px solid #ddd;border-radius:7px}
@@ -26,12 +26,22 @@ button{background:#65452f;color:white;border:0;font-weight:bold;cursor:pointer}
 </header>
 
 <main>
+
 <section class="card" id="login">
 <h2>Admin Login</h2>
 <input type="email" id="email" placeholder="Admin email">
 <input type="password" id="password" placeholder="Password">
 <button onclick="loginAdmin()">Login</button>
+<button onclick="forgotPassword()">Forgot Password?</button>
 <p id="loginMessage" class="small"></p>
+</section>
+
+<section class="card hidden" id="reset">
+<h2>Create New Password</h2>
+<input type="password" id="newPassword" placeholder="New password">
+<input type="password" id="confirmPassword" placeholder="Confirm new password">
+<button onclick="saveNewPassword()">Update Password</button>
+<p id="resetMessage" class="small"></p>
 </section>
 
 <section id="dashboard" class="hidden">
@@ -42,6 +52,7 @@ button{background:#65452f;color:white;border:0;font-weight:bold;cursor:pointer}
 <div id="orders">Loading...</div>
 </div>
 </section>
+
 </main>
 
 <script>
@@ -49,6 +60,63 @@ const SUPABASE_URL = "https://fxekfzascashwrtgwbtr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_9fAQ7qBb2bQgVgqhQP49FQ_IjXCwic0";
 
 const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+db.auth.onAuthStateChange((event,session)=>{
+ if(event==="PASSWORD_RECOVERY"){
+   showReset();
+ }
+});
+
+function showReset(){
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("reset").classList.remove("hidden");
+}
+
+async function forgotPassword(){
+ const email=document.getElementById("email").value.trim();
+ const msg=document.getElementById("loginMessage");
+
+ if(!email){
+   msg.textContent="Please enter your admin email first.";
+   return;
+ }
+
+ const {error}=await db.auth.resetPasswordForEmail(email,{
+   redirectTo:window.location.origin+"/admin.html"
+ });
+
+ msg.textContent=error
+ ? "Reset failed: "+error.message
+ : "Password reset email sent. Check your inbox.";
+}
+
+async function saveNewPassword(){
+ const password=document.getElementById("newPassword").value;
+ const confirm=document.getElementById("confirmPassword").value;
+ const msg=document.getElementById("resetMessage");
+
+ if(password.length<8){
+   msg.textContent="Password must be at least 8 characters.";
+   return;
+ }
+
+ if(password!==confirm){
+   msg.textContent="Passwords do not match.";
+   return;
+ }
+
+ const {error}=await db.auth.updateUser({password});
+
+ if(error){
+   msg.textContent="Update failed: "+error.message;
+   return;
+ }
+
+ msg.textContent="Password updated! You can now log in.";
+ document.getElementById("reset").classList.add("hidden");
+ document.getElementById("login").classList.remove("hidden");
+}
 
 async function loginAdmin(){
  const email=document.getElementById("email").value.trim();
@@ -71,10 +139,8 @@ async function loadOrders(){
  const area=document.getElementById("orders");
  area.textContent="Loading orders...";
 
- const {data,error}=await db
- .from("orders")
- .select("*")
- .order("created_at",{ascending:false});
+ const {data,error}=await db.from("orders")
+ .select("*").order("created_at",{ascending:false});
 
  if(error){
    area.textContent="Cannot load orders: "+error.message;
@@ -94,14 +160,15 @@ async function loadOrders(){
 
    const details=document.createElement("div");
    details.textContent=
-     "Order #"+order.id+
-     " | "+order.customer_name+
-     " | "+order.customer_phone+
-     " | "+order.order_type+
-     " | ₱"+Number(order.total_amount).toFixed(2)+
-     " | "+order.payment_method;
+   "Order #"+order.id+
+   " | "+order.customer_name+
+   " | "+order.customer_phone+
+   " | "+order.order_type+
+   " | ₱"+Number(order.total_amount).toFixed(2)+
+   " | "+order.payment_method;
 
    const status=document.createElement("select");
+
    ["Pending","Preparing","Ready","Completed","Cancelled"].forEach(s=>{
      const option=document.createElement("option");
      option.value=s;
@@ -112,7 +179,7 @@ async function loadOrders(){
 
    const items=document.createElement("p");
    items.textContent="Items: "+(order.order_items||[])
-     .map(i=>i.name+" x "+i.quantity).join(", ");
+   .map(i=>i.name+" x "+i.quantity).join(", ");
 
    const update=document.createElement("button");
    update.textContent="Update Status";
@@ -125,8 +192,7 @@ async function loadOrders(){
 
 async function updateStatus(id,status){
  const {error}=await db.from("orders")
-   .update({status})
-   .eq("id",id);
+ .update({status}).eq("id",id);
 
  if(error){
    alert("Update failed: "+error.message);
